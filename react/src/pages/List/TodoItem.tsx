@@ -2,10 +2,17 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useCheckboxState } from '@/hooks/useCheckboxState';
+import { useEffect } from 'react';
 
-const TodoItemComponent = ({ item }) => {
+const TodoItemComponent = ({ item, onUpdate }) => {
   const navigate = useNavigate();
   const { isChecked, handleCheckboxChange } = useCheckboxState(item);
+
+  useEffect(() => {
+    if (isChecked !== item.done) {
+      onUpdate({ ...item, done: isChecked });
+    }
+  }, [isChecked]);
 
   return (
     <ListItem key={item._id}>
