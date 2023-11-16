@@ -7,10 +7,17 @@ import { useTodoSubmit } from '@pages/Regist/TodoRegist.hooks';
 export default function TodoRegist() {
   const [imagePath, setImagePath] = useState('');
   const { titleInput, handleTitleChange, contentInput, handleContentChange } = useTodoForm();
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
 
   const handleImageUpload = async event => {
+    const file = event.target.files[0];
+    if (file) {
+      const previewUrl = URL.createObjectURL(file);
+      setPreviewImage(previewUrl);
+    }
     const formData = new FormData();
-    formData.append('image', event.target.files[0]);
+    // formData.append('image', event.target.files[0]);
+    formData.append('image', file);
 
     const response = await fetch('http://localhost:33088/api/upload', {
       method: 'POST',
@@ -67,6 +74,7 @@ export default function TodoRegist() {
             />
           </div>
           <input type="file" onChange={handleImageUpload} />
+          {previewImage && <Img src={previewImage} alt="Preview" style={{ maxWidth: '100%', marginTop: '20px' }} />}
 
           <Button className="create-btn">ADD</Button>
         </form>
@@ -147,4 +155,11 @@ const Button = styled.button`
   background-color: #2d77af;
   color: white;
   cursor: pointer;
+`;
+
+const Img = styled.img`
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
 `;
