@@ -5,6 +5,7 @@ export interface TodoItem {
   done: boolean;
   createdAt?: string;
   updatedAt?: string;
+  imagePath?: string;
 }
 
 export const defaultTodoItem: TodoItem = {

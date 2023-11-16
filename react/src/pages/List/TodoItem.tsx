@@ -20,6 +20,8 @@ const TodoItemComponent = ({ item, onUpdate }) => {
         <input type="checkbox" id={`checkbox-${item._id}`} checked={isChecked} onChange={handleCheckboxChange} />
         <label htmlFor={`checkbox-${item._id}`}></label>
       </CheckboxContainer>
+      {item.imagePath && <Img src={`http://localhost:33088/${item.imagePath}`} alt="Todo" />}
+
       <TitleContentContainer>
         <StyledLink to={`todo/${item._id}`}>{item.title}</StyledLink>
         <ContentParagraph>{item.content}</ContentParagraph>
@@ -160,4 +162,11 @@ const Button = styled.button`
     font-size: 20px;
     margin: 0 auto 80px;
   }
+`;
+
+const Img = styled.img`
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
 `;
