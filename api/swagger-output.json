@@ -21,6 +21,16 @@
     "http"
   ],
   "paths": {
+    "/upload": {
+      "post": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/todolist": {
       "get": {
         "tags": [

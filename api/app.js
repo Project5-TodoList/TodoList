@@ -3,11 +3,12 @@ import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
-import swaggerFile from './swagger-output.json' assert {type: 'json'};
+import swaggerFile from './swagger-output.json' assert { type: 'json' };
 
 import indexRouter from './routes/todo.js';
 
 var app = express();
+app.use('/uploads', express.static('uploads'));
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -18,17 +19,15 @@ app.use('/apidocs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 app.use(
   cors({
-    origin: [
-      /^https?:\/\/localhost/
-    ],
+    origin: [/^https?:\/\/localhost/],
     credentials: true,
-  })
+  }),
 );
 
 app.use('/api', indexRouter);
 
 // 404 에러
-app.use(function(req, res, next){
+app.use(function (req, res, next) {
   console.log(req.url);
   const err = new Error(`${req.url} 리소스를 찾을 수 없습니다.`);
   err.status = 404;
@@ -36,16 +35,16 @@ app.use(function(req, res, next){
 });
 
 // 500 에러
-app.use(function(err, req, res, next){
+app.use(function (err, req, res, next) {
   console.error(err.stack);
   const status = err.status || 500;
 
   let message = '서버 오류';
-  if(status !== 500){
+  if (status !== 500) {
     message = err.message;
   }
 
-  res.status(status).json({ok: 0, error: {message}});  
+  res.status(status).json({ ok: 0, error: { message } });
 });
 
 export default app;

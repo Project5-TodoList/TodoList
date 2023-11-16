@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { createTodo } from '@/api/TodoAPI';
+// import { createTodo } from '@/api/TodoAPI';
 
 export const useTodoForm = () => {
   const [titleInput, setTitleInput] = useState<string>('');
@@ -25,20 +25,20 @@ export const useTodoForm = () => {
 export const useTodoSubmit = () => {
   const navigate = useNavigate();
 
-  const handleSubmit = async (title: string, content: string) => {
-    if (!title || !content) {
-      alert('제목과 내용을 모두 입력해주세요.');
-      return;
-    }
+  const handleSubmitForm = async (title, content, imagePath) => {
+    const response = await fetch('http://localhost:33088/api/todolist', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title, content, imagePath }), // imagePath 포함하여 전송
+    });
 
-    try {
-      await createTodo(title, content);
-      alert('등록되었습니다.');
-      navigate('/');
-    } catch (error) {
-      console.error(error);
+    const data = await response.json();
+    if (data.ok) {
+      navigate('/'); // 성공 시 홈으로 이동
+    } else {
+      // 오류 처리
     }
   };
 
-  return handleSubmit;
+  return handleSubmitForm;
 };

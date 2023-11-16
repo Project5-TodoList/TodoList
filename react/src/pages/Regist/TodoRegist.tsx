@@ -1,16 +1,39 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useTodoForm } from '@pages/Regist/TodoRegist.hooks';
 import { useTodoSubmit } from '@pages/Regist/TodoRegist.hooks';
 
 export default function TodoRegist() {
+  const [imagePath, setImagePath] = useState('');
   const { titleInput, handleTitleChange, contentInput, handleContentChange } = useTodoForm();
-  const handleSubmitForm = useTodoSubmit();
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleImageUpload = async event => {
+    const file = event.target.files[0];
+    if (file) {
+      const previewUrl = URL.createObjectURL(file);
+      setPreviewImage(previewUrl);
+    }
+    const formData = new FormData();
+    // formData.append('image', event.target.files[0]);
+    formData.append('image', file);
+
+    const response = await fetch('http://localhost:33088/api/upload', {
+      method: 'POST',
+      body: formData,
+    });
+
+    const data = await response.json();
+    if (data.ok) {
+      setImagePath(data.filePath); // 서버로부터 받은 이미지 경로를 저장
+    }
+  };
+
+  const handleSubmitForm = useTodoSubmit();
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    handleSubmitForm(titleInput, contentInput);
+    await handleSubmitForm(titleInput, contentInput, imagePath); // imagePath를 등록 로직에 포함
   };
 
   const navigate = useNavigate();
@@ -50,8 +73,10 @@ export default function TodoRegist() {
               onChange={handleContentChange}
             />
           </div>
+          <input type="file" onChange={handleImageUpload} />
+          {previewImage && <Img src={previewImage} alt="Preview" style={{ maxWidth: '100%', marginTop: '20px' }} />}
 
-          <button className="create-btn">ADD</button>
+          <Button className="create-btn">ADD</Button>
         </form>
       </PageStyle>
     </>
@@ -117,4 +142,24 @@ const PageStyle = styled.div`
     background-color: white;
     color: #2d77af;
   }
+`;
+
+const Button = styled.button`
+  width: 50%;
+  margin-top: 30px;
+  padding: 20px 0;
+  text-align: center;
+  font-size: 20px;
+  box-sizing: border-box;
+  border: 1px solid #2d77af;
+  background-color: #2d77af;
+  color: white;
+  cursor: pointer;
+`;
+
+const Img = styled.img`
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
 `;

@@ -58,6 +58,8 @@ export default function TodoInfo() {
                 todo.title
               )}
             </Title>
+            {todo.imagePath && <Img src={`http://localhost:33088/${todo.imagePath}`} alt="Todo" />}
+
             <Content>
               {isEditing ? (
                 <ContentTextarea
@@ -250,4 +252,10 @@ const CheckboxContainer = styled.div`
       opacity: 1;
     }
   }
+`;
+
+const Img = styled.img`
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
 `;
