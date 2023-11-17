@@ -3,7 +3,7 @@ import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
-import swaggerFile from './swagger-output.json' assert { type: 'json' };
+import swaggerFile from './swagger-output.json' with { type: 'json' };
 
 import indexRouter from './routes/todo.js';
 
@@ -19,7 +19,7 @@ app.use('/apidocs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 app.use(
   cors({
-    origin: [/^https?:\/\/localhost/],
+    origin: '*',
     credentials: true,
   }),
 );

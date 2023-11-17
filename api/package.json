@@ -6,7 +6,8 @@
   "scripts": {
     "prestart": "node ./swagger.js",
     "start": "node ./bin/www.js",
-    "dev": "nodemon ./bin/www.js"
+    "dev": "nodemon ./bin/www.js",
+    "build": "babel . --out-dir dist --ignore node_modules,bin,uploads,react"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -21,5 +22,27 @@
     "multer": "^1.4.5-lts.1",
     "swagger-autogen": "^2.23.6",
     "swagger-ui-express": "^5.0.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.23.0",
+    "@babel/core": "^7.23.3",
+    "@babel/node": "^7.22.19",
+    "@babel/plugin-syntax-import-assertions": "^7.23.3",
+    "@babel/plugin-syntax-import-attributes": "^7.23.3",
+    "@babel/preset-env": "^7.23.3"
+  },
+  "presets": [
+    "@babel/preset-env"
+  ],
+  "plugins": [
+    "@babel/plugin-syntax-import-attributes"
+  ],
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ],
+    "plugins": [
+      "@babel/plugin-syntax-import-attributes"
+    ]
   }
 }
